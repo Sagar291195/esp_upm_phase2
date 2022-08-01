@@ -5,6 +5,8 @@
 #include "disp_driver.h"
 #include "disp_spi.h"
 
+#define CONFIG_LV_TFT_DISPLAY_CONTROLLER_ILI9488 1
+
 void disp_driver_init(void)
 {
 #if defined CONFIG_LV_TFT_DISPLAY_CONTROLLER_ILI9341
@@ -77,6 +79,7 @@ void disp_driver_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t *
 #elif defined CONFIG_LV_TFT_DISPLAY_CONTROLLER_UC8151D
     uc8151d_lv_fb_flush(drv, area, color_map);
 #endif
+
 }
 
 void disp_driver_rounder(lv_disp_drv_t * disp_drv, lv_area_t * area)

@@ -23,21 +23,30 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+
+#include "lm2759.h"
+#include "i2cdev.h"
+
 #ifdef LV_LVGL_H_INCLUDE_SIMPLE
 #include "lvgl.h"
 #else
-#include "lvgl/lvgl.h"
+#include "../../lvgl/lvgl.h"
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+//#define FT6236_I2C_SLAVE_ADDR   0x38
+
 #define FT6236_I2C_SLAVE_ADDR   0x38
 
 /* Maximum border values of the touchscreen pad that the chip can handle */
 #define  FT6X36_MAX_WIDTH              ((uint16_t)800)
 #define  FT6X36_MAX_HEIGHT             ((uint16_t)480)
+
+// #define  FT6X36_MAX_WIDTH              ((uint16_t)480)
+// #define  FT6X36_MAX_HEIGHT             ((uint16_t)320)
 
 /* Max detectable simultaneous touch points */
 #define FT6X36_MAX_TOUCH_PNTS     2
@@ -145,11 +154,19 @@ typedef struct {
     bool inited;
 } ft6x36_status_t;
 
+typedef struct {
+    i2c_dev_t i2c_dev;  //!< I2C device descriptor    
+} ft6x36_t;
+
 /**
   * @brief  Initialize for FT6x36 communication via I2C
   * @param  dev_addr: Device address on communication Bus (I2C slave address of FT6X36).
   * @retval None
   */
+esp_err_t ft6x36_init_desc(ft6x36_t *dev, uint8_t addr, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio);
+static esp_err_t read_reg_16(ft6x36_t *dev, uint8_t reg, uint16_t *val);
+static esp_err_t read_reg_8(ft6x36_t *dev, uint8_t reg, uint8_t *val);
+
 void ft6x06_init(uint16_t dev_addr);
 
 uint8_t ft6x36_get_gesture_id();
@@ -160,7 +177,9 @@ uint8_t ft6x36_get_gesture_id();
   * @param  data: Store data here
   * @retval Always false
   */
+
 bool ft6x36_read(lv_indev_drv_t *drv, lv_indev_data_t *data);
+
 
 #ifdef __cplusplus
 }

@@ -48,34 +48,41 @@
  *********************/
 #define TAG "demo"
 #define LV_TICK_PERIOD_MS 1
-
+#define WAKEMODE 32
 /**********************
  *  STATIC PROTOTYPES
  **********************/
-static void lv_tick_task(void *arg);
+static void IRAM_ATTR lv_tick_task(void *arg);
 static void guiTask(void *pvParameter);
 static void create_demo_application(void);
-
+static void wakeupmodeInit(void);
 /**********************
  *   APPLICATION MAIN
  **********************/
-void app_main() {
+ /* Creates a semaphore to handle concurrent call to lvgl stuff
+ * If you wish to call *any* lvgl function from other threads/tasks
+ * you should lock on the very same semaphore! */
+SemaphoreHandle_t xGuiSemaphore;
+SemaphoreHandle_t xGuiSemaphore1;
 
+void app_main() {
+	
+	xGuiSemaphore = xSemaphoreCreateMutex();
+    xGuiSemaphore1 = xSemaphoreCreateMutex();
+	wakeupmodeInit();
+	ESP_ERROR_CHECK(i2cdev_init());
     /* If you want to use a task to create the graphic, you NEED to create a Pinned task
      * Otherwise there can be problem such as memory corruption and so on.
      * NOTE: When not using Wi-Fi nor Bluetooth you can pin the guiTask to core 0 */
     xTaskCreatePinnedToCore(guiTask, "gui", 4096*2, NULL, 0, NULL, 1);
 }
 
-/* Creates a semaphore to handle concurrent call to lvgl stuff
- * If you wish to call *any* lvgl function from other threads/tasks
- * you should lock on the very same semaphore! */
-SemaphoreHandle_t xGuiSemaphore;
+
 
 static void guiTask(void *pvParameter) {
 
     (void) pvParameter;
-    xGuiSemaphore = xSemaphoreCreateMutex();
+    //xGuiSemaphore = xSemaphoreCreateMutex();
 
     lv_init();
 
@@ -151,9 +158,9 @@ static void guiTask(void *pvParameter) {
         vTaskDelay(pdMS_TO_TICKS(10));
 
         /* Try to take the semaphore, call lvgl related function on success */
-        if (pdTRUE == xSemaphoreTake(xGuiSemaphore, portMAX_DELAY)) {
+        if (pdTRUE == xSemaphoreTake(xGuiSemaphore1, portMAX_DELAY)) {
             lv_task_handler();
-            xSemaphoreGive(xGuiSemaphore);
+            xSemaphoreGive(xGuiSemaphore1);
        }
     }
 
@@ -203,8 +210,16 @@ static void create_demo_application(void)
 #endif
 }
 
-static void lv_tick_task(void *arg) {
-    (void) arg;
+static void IRAM_ATTR lv_tick_task(void *arg)
+{
+    (void)arg;
+    lv_tick_inc(portTICK_RATE_MS);
+}
 
-    lv_tick_inc(LV_TICK_PERIOD_MS);
+static void wakeupmodeInit(void)
+{
+    // Set GPIO as OUTPUT
+    gpio_pad_select_gpio(WAKEMODE);
+    gpio_set_direction(WAKEMODE, GPIO_MODE_OUTPUT); // WakeMode
+    gpio_set_level(WAKEMODE, 0);
 }

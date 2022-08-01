@@ -4,6 +4,9 @@ file(GLOB SOURCES *.c)
 set(LVGL_INCLUDE_DIRS . lvgl_tft)
 list(APPEND SOURCES "lvgl_tft/disp_driver.c")
 
+list(APPEND SOURCES "lvgl_touch/lm2759.c")   
+list(APPEND SOURCES "lvgl_touch/i2cdev.c") 
+
 #@todo add SimleInclude macro here
 
 # Include only the source file of the selected
@@ -60,6 +63,8 @@ if(CONFIG_LV_TOUCH_CONTROLLER)
         list(APPEND SOURCES "lvgl_touch/xpt2046.c")
     elseif(CONFIG_LV_TOUCH_CONTROLLER_FT6X06)
         list(APPEND SOURCES "lvgl_touch/ft6x36.c")
+        #list(APPEND SOURCES "lvgl_touch/lm2759.c")   
+        #list(APPEND SOURCES "lvgl_touch/i2cdev.c")   
     elseif(CONFIG_LV_TOUCH_CONTROLLER_STMPE610)
         list(APPEND SOURCES "lvgl_touch/stmpe610.c")
     elseif(CONFIG_LV_TOUCH_CONTROLLER_ADCRAW)

@@ -2,8 +2,8 @@
  * @file ili9488.h
  */
 
-#ifndef ILI9844_H
-#define ILI9844_H
+#ifndef ILI9488_H
+#define ILI9488_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,13 +18,14 @@ extern "C" {
 #ifdef LV_LVGL_H_INCLUDE_SIMPLE
 #include "lvgl.h"
 #else
-#include "lvgl/lvgl.h"
+#include "../../lvgl/lvgl.h"
 #endif
 #include "../lvgl_helpers.h"
 
 /*********************
  *      DEFINES
  *********************/
+#define DISP_BUF_SIZE (LV_HOR_RES_MAX * 40)
 #define ILI9488_DC   CONFIG_LV_DISP_PIN_DC
 #define ILI9488_RST  CONFIG_LV_DISP_PIN_RST
 #define ILI9488_BCKL CONFIG_LV_DISP_PIN_BCKL

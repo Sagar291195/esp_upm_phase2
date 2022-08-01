@@ -17,8 +17,12 @@ extern "C" {
 #ifdef LV_LVGL_H_INCLUDE_SIMPLE
 #include "lvgl.h"
 #else
-#include "lvgl/lvgl.h"
+#include "../../lvgl/lvgl.h"
 #endif
+
+//#include "lm2759.h"
+
+#define CONFIG_LV_TOUCH_CONTROLLER_FT6X06 1
 
 #if defined (CONFIG_LV_TOUCH_CONTROLLER_XPT2046)
 #include "xpt2046.h"
@@ -43,6 +47,8 @@ extern "C" {
  **********************/
 void touch_driver_init(void);
 bool touch_driver_read(lv_indev_drv_t *drv, lv_indev_data_t *data);
+
+
 
 #ifdef __cplusplus
 } /* extern "C" */

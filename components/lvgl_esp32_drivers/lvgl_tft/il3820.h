@@ -28,7 +28,7 @@ extern "C"
 
 #define IL3820_DC_PIN           CONFIG_LV_DISP_PIN_DC
 #define IL3820_RST_PIN          CONFIG_LV_DISP_PIN_RST
-#define IL3820_BUSY_PIN         CONFIG_LV_DISP_PIN_BUSY
+#define IL3820_BUSY_PIN         //CONFIG_LV_DISP_PIN_BUSY
 #define IL3820_BUSY_LEVEL       1
 
 /* IL3820 commands */

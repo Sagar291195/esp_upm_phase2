@@ -11,6 +11,10 @@
 #include "esp_log.h"
 #include "esp_heap_caps.h"
 
+//#include "C:/esp/esp-idf/components/heap/include/esp_heap_caps.h"
+
+
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -18,6 +22,9 @@
  *      DEFINES
  *********************/
  #define TAG "ILI9488"
+
+
+#define USB_CS				26
 
 /**********************
  *      TYPEDEFS
@@ -52,6 +59,39 @@ static void ili9488_send_color(void * data, uint16_t length);
  **********************/
 // From github.com/jeremyjh/ESP32_TFT_library 
 // From github.com/mvturnho/ILI9488-lvgl-ESP32-WROVER-B
+
+// Functions for driver MAX3421e (implement LCD_Reset as extended GPIO of MAX3421e ) LCD_Reset -> GPOUT1
+// CTP_Reset -> GPOUT2
+static void ili9488_clr_rst(void);
+static void ili9488_set_rst(void);
+//static void ft6236_reset(void);
+//----------------------------------------------------------------------------
+
+static void ili9488_clr_rst(void)
+{
+	uint8_t tmp = 0xA2;
+	gpio_set_level(USB_CS, 0);
+	while(disp_spi_is_busy()) {};
+	disp_spi_send_data(&tmp, 1);		// Write R20 (IOPINS1)
+	while(disp_spi_is_busy()) {};
+	tmp = 0;
+	disp_spi_send_data(&tmp, 1);		// Write GPOUT1 - 0
+	gpio_set_level(USB_CS, 1);
+}
+
+static void ili9488_set_rst(void)
+{
+	uint8_t tmp = 0xA2;
+	gpio_set_level(USB_CS, 0);
+	while(disp_spi_is_busy()) {};
+	disp_spi_send_data(&tmp, 1);		// Write R20 (IOPINS1)
+	while(disp_spi_is_busy()) {};
+	tmp = 0x06;							// 0x02
+	disp_spi_send_data(&tmp, 1);		// Write GPOUT1 - 1
+	gpio_set_level(USB_CS, 1);
+}
+
+
 void ili9488_init(void)
 {
 	lcd_init_cmd_t ili_init_cmds[]={
@@ -62,6 +102,7 @@ void ili9488_init(void)
 		{ILI9488_CMD_POWER_CONTROL_2, {0x41}, 1},
 		{ILI9488_CMD_VCOM_CONTROL_1, {0x00, 0x12, 0x80}, 3},
 		{ILI9488_CMD_MEMORY_ACCESS_CONTROL, {(0x20 | 0x08)}, 1},
+		//{ILI9488_CMD_MEMORY_ACCESS_CONTROL, {0x48}, 1},
 		{ILI9488_CMD_COLMOD_PIXEL_FORMAT_SET, {0x66}, 1},
 		{ILI9488_CMD_INTERFACE_MODE_CONTROL, {0x00}, 1},
 		{ILI9488_CMD_FRAME_RATE_CONTROL_NORMAL, {0xA0}, 1},
@@ -76,28 +117,35 @@ void ili9488_init(void)
 	};
 
 	//Initialize non-SPI GPIOs
-        gpio_pad_select_gpio(ILI9488_DC);
+    gpio_pad_select_gpio(ILI9488_DC);
 	gpio_set_direction(ILI9488_DC, GPIO_MODE_OUTPUT);
-        gpio_pad_select_gpio(ILI9488_RST);
-	gpio_set_direction(ILI9488_RST, GPIO_MODE_OUTPUT);
+    //gpio_pad_select_gpio(ILI9488_RST);
+	//gpio_set_direction(ILI9488_RST, GPIO_MODE_OUTPUT);
+	gpio_set_direction(USB_CS, GPIO_MODE_OUTPUT);
 
 #if ILI9488_ENABLE_BACKLIGHT_CONTROL
         gpio_pad_select_gpio(ILI9488_BCKL);
 	gpio_set_direction(ILI9488_BCKL, GPIO_MODE_OUTPUT);
 #endif
 
-	//Reset the display
-	gpio_set_level(ILI9488_RST, 0);
+	// //Reset the display
+	// gpio_set_level(ILI9488_RST, 0);
+	// vTaskDelay(100 / portTICK_RATE_MS);
+	// gpio_set_level(ILI9488_RST, 1);
+	// vTaskDelay(100 / portTICK_RATE_MS);
+
+    ili9488_clr_rst();
 	vTaskDelay(100 / portTICK_RATE_MS);
-	gpio_set_level(ILI9488_RST, 1);
-	vTaskDelay(100 / portTICK_RATE_MS);
+	ili9488_set_rst();
+	vTaskDelay(100 / portTICK_RATE_MS);	
 
 	ESP_LOGI(TAG, "ILI9488 initialization.");
 
 	// Exit sleep
 	ili9488_send_cmd(0x01);	/* Software reset */
 	vTaskDelay(100 / portTICK_RATE_MS);
-	
+
+
 	//Send all the commands
 	uint16_t cmd = 0;
 	while (ili_init_cmds[cmd].databytes!=0xff) {
@@ -111,7 +159,7 @@ void ili9488_init(void)
 
 	ili9488_enable_backlight(true);
 
-        ili9488_set_orientation(CONFIG_LV_DISPLAY_ORIENTATION);
+    ili9488_set_orientation(CONFIG_LV_DISPLAY_ORIENTATION);
 }
 
 // Flush function based on mvturnho repo
@@ -138,6 +186,16 @@ void ili9488_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * col
         mybuf[j] = (uint8_t) (((LD & 0x001F) << 3) | ((LD & 0x0010) >> 2));
         j++;
     }
+
+	//  for (uint32_t i = 0; i < size; i++) {
+    //     LD = buffer_16bit[i].full;
+    //     mybuf[j] = (uint8_t) ((LD & 0xF800) >> 8);
+    //     j++;
+    //     mybuf[j] = (uint8_t) ((LD & 0x07E0) >> 3);
+    //     j++;
+    //     mybuf[j] = (uint8_t) ((LD & 0x001F) << 3);
+    //     j++;
+    // }
 
 	/* Column addresses  */
 	uint8_t xb[] = {
@@ -168,6 +226,8 @@ void ili9488_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * col
 
 	ili9488_send_color((void *) mybuf, size * 3);
 	heap_caps_free(mybuf);
+	//lv_disp_flush_ready(drv);
+	
 }
 
 void ili9488_enable_backlight(bool backlight)
@@ -193,15 +253,20 @@ void ili9488_enable_backlight(bool backlight)
 
 static void ili9488_send_cmd(uint8_t cmd)
 {
+
+
     disp_wait_for_pending_transactions();
     gpio_set_level(ILI9488_DC, 0);	 /*Command mode*/
+	//printf("DC_Pin_set_Low\n");
     disp_spi_send_data(&cmd, 1);
 }
 
 static void ili9488_send_data(void * data, uint16_t length)
 {
-    disp_wait_for_pending_transactions();
+    //disp_wait_for_pending_transactions();
+	while(disp_spi_is_busy()) {}
     gpio_set_level(ILI9488_DC, 1);	 /*Data mode*/
+	//printf("DC_Pin_set_HIGH\n");
     disp_spi_send_data(data, length);
 }
 
@@ -209,6 +274,7 @@ static void ili9488_send_color(void * data, uint16_t length)
 {
     disp_wait_for_pending_transactions();
     gpio_set_level(ILI9488_DC, 1);   /*Data mode*/
+	//printf("DC_Pin_set_HIGH\n");
     disp_spi_send_colors(data, length);
 }
 

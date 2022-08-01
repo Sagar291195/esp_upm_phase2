@@ -5,14 +5,27 @@
 #include "touch_driver.h"
 #include "tp_spi.h"
 #include "tp_i2c.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+
+
+
+//#include "lm2759.h"
+
+#define CONFIG_LV_TOUCH_CONTROLLER_FT6X06 1
 
 void touch_driver_init(void)
 {
 #if defined (CONFIG_LV_TOUCH_CONTROLLER_XPT2046)
     xpt2046_init();
 #elif defined (CONFIG_LV_TOUCH_CONTROLLER_FT6X06)
+    //printf("Hello Check touch driver\n");
     ft6x06_init(FT6236_I2C_SLAVE_ADDR);
+    
+    //lcd_led_driver_init();
 #elif defined (CONFIG_LV_TOUCH_CONTROLLER_STMPE610)
     stmpe610_init();
 #elif defined (CONFIG_LV_TOUCH_CONTROLLER_ADCRAW)
@@ -26,6 +39,7 @@ void touch_driver_init(void)
 
 bool touch_driver_read(lv_indev_drv_t *drv, lv_indev_data_t *data)
 {
+    //printf("touch driver read\n");
     bool res = false;
 
 #if defined (CONFIG_LV_TOUCH_CONTROLLER_XPT2046)

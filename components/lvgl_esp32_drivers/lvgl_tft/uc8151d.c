@@ -41,8 +41,8 @@
 #define PIN_DC_BIT          ((1ULL << (uint8_t)(CONFIG_LV_DISP_PIN_DC)))
 #define PIN_RST             CONFIG_LV_DISP_PIN_RST
 #define PIN_RST_BIT         ((1ULL << (uint8_t)(CONFIG_LV_DISP_PIN_RST)))
-#define PIN_BUSY            CONFIG_LV_DISP_PIN_BUSY
-#define PIN_BUSY_BIT        ((1ULL << (uint8_t)(CONFIG_LV_DISP_PIN_BUSY)))
+#define PIN_BUSY            //CONFIG_LV_DISP_PIN_BUSY
+#define PIN_BUSY_BIT        //((1ULL << (uint8_t)(CONFIG_LV_DISP_PIN_BUSY)))
 #define EVT_BUSY            (1UL << 0UL)
 #define EPD_WIDTH           LV_HOR_RES_MAX
 #define EPD_HEIGHT          LV_VER_RES_MAX

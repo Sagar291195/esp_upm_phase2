@@ -94,6 +94,8 @@ static spi_host_device_t spi_host;
 static spi_device_handle_t spi;
 static QueueHandle_t TransactionPool = NULL;
 static transaction_cb_t chained_post_cb;
+static volatile bool spi_trans_in_progress;
+static volatile bool spi_color_sent;
 
 /**********************
  *      MACROS
@@ -293,12 +295,70 @@ void disp_spi_release(void)
     spi_device_release_bus(spi);
 }
 
+
+void disp_spi_send_data(uint8_t * data, uint16_t length)
+{
+    if (length == 0) return;           //no need to send anything
+
+    while(spi_trans_in_progress);
+
+    spi_transaction_t t = {
+        .length = length * 8, // transaction length is in bits
+        .tx_buffer = data
+    };
+
+    // spi_trans_in_progress = true;
+    // spi_color_sent = false;             //Mark the "lv_flush_ready" NOT needs to be called in "spi_ready"
+    // spi_device_queue_trans(spi, &t, portMAX_DELAY);
+
+	//spi_transaction_t *ta = &t;
+	//spi_device_get_trans_result(spi,&ta, portMAX_DELAY);
+
+    spi_device_polling_transmit(spi, &t);
+}
+
+void disp_spi_send_colors(uint8_t * data, uint16_t length)
+{
+    if (length == 0) {
+	return;
+    }
+
+    while(spi_trans_in_progress);
+
+    spi_transaction_t t = {
+        .length = length * 8, // transaction length is in bits
+        .tx_buffer = data
+    };
+    
+    // spi_trans_in_progress = true;
+    // spi_color_sent = true;              //Mark the "lv_flush_ready" needs to be called in "spi_ready"
+    // spi_device_queue_trans(spi, &t, portMAX_DELAY);
+	//spi_transaction_t *ta = &t;
+	//spi_device_get_trans_result(spi,&ta, portMAX_DELAY);
+
+    spi_device_polling_transmit(spi, &t);
+    lv_disp_t * disp = _lv_refr_get_disp_refreshing();
+    lv_disp_flush_ready(&disp->driver);
+}
+
+
+bool disp_spi_is_busy(void)
+{
+    return spi_trans_in_progress;
+}
+
+
+
+
 /**********************
  *   STATIC FUNCTIONS
  **********************/
 
 static void IRAM_ATTR spi_ready(spi_transaction_t *trans)
 {
+
+    spi_trans_in_progress = false;
+
     disp_spi_send_flag_t flags = (disp_spi_send_flag_t) trans->user;
 
     if (flags & DISP_SPI_SIGNAL_FLUSH) {
