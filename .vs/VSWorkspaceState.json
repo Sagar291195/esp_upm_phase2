@@ -1,6 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\components",
+    "\\components\\lvgl_esp32_drivers",
+    "\\components\\lvgl_esp32_drivers\\lvgl_tft",
+    "\\components\\lvgl_esp32_drivers\\lvgl_touch",
+    "\\main"
   ],
+  "SelectedNode": "\\components\\lvgl_esp32_drivers\\lvgl_tft\\disp_driver.c",
   "PreviewInSolutionExplorer": false
 }

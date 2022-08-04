@@ -42,6 +42,7 @@ void *disp_driver_init(void)
 #elif defined CONFIG_LV_TFT_DISPLAY_CONTROLLER_UC8151D
    uc8151d_init();
 #endif
+   return NULL;
 }
 
 void disp_driver_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color_map)

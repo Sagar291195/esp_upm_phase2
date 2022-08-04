@@ -338,7 +338,7 @@ void disp_spi_send_colors(uint8_t * data, uint16_t length)
 
     spi_device_polling_transmit(spi, &t);
     lv_disp_t * disp = _lv_refr_get_disp_refreshing();
-    lv_disp_flush_ready(&disp->driver);
+    lv_disp_flush_ready(disp->driver);
 }
 
 
@@ -370,7 +370,7 @@ static void IRAM_ATTR spi_ready(spi_transaction_t *trans)
         disp = lv_refr_get_disp_refreshing();
 #endif
 
-        lv_disp_flush_ready(&disp->driver);
+        lv_disp_flush_ready(disp->driver);
     }
 
     if (chained_post_cb) {
