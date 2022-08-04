@@ -37,12 +37,9 @@ void touch_driver_init(void)
 #endif
 }
 
-#if LVGL_VERSION_MAJOR >= 8
-void touch_driver_read(lv_indev_drv_t *drv, lv_indev_data_t *data)
-#else
 bool touch_driver_read(lv_indev_drv_t *drv, lv_indev_data_t *data)
-#endif
 {
+    //printf("touch driver read\n");
     bool res = false;
 
 #if defined (CONFIG_LV_TOUCH_CONTROLLER_XPT2046)
@@ -59,11 +56,6 @@ bool touch_driver_read(lv_indev_drv_t *drv, lv_indev_data_t *data)
     res = ra8875_touch_read(drv, data);
 #endif
 
-#if LVGL_VERSION_MAJOR >= 8
-    data->continue_reading = res;
-#else
-    return res;
-#endif
     return res;
 }
 
