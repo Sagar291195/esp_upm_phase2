@@ -7,7 +7,7 @@
 
 #define CONFIG_LV_TFT_DISPLAY_CONTROLLER_ILI9488 1
 
-void disp_driver_init(void)
+void *disp_driver_init(void)
 {
 #if defined CONFIG_LV_TFT_DISPLAY_CONTROLLER_ILI9341
     ili9341_init();

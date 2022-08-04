@@ -56,6 +56,9 @@ bool touch_driver_read(lv_indev_drv_t *drv, lv_indev_data_t *data)
     res = ra8875_touch_read(drv, data);
 #endif
 
+#if LVGL_VERSION_MAJOR >= 8
+    data->continue_reading = res;
+#else
     return res;
 }
 
