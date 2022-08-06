@@ -32,6 +32,7 @@ extern "C" {
 #endif
 
 #include "src/lv_demo_widgets/lv_demo_widgets.h"
+#include "src/lv_demo_custom/lv_demo_custom.h"
 
 /*********************
  *      DEFINES

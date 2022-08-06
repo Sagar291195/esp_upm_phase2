@@ -2,11 +2,14 @@
   "ExpandedNodes": [
     "",
     "\\components",
-    "\\components\\lvgl_esp32_drivers",
-    "\\components\\lvgl_esp32_drivers\\lvgl_tft",
     "\\components\\lvgl_esp32_drivers\\lvgl_touch",
+    "\\components\\lv_examples",
+    "\\components\\lv_examples\\lv_examples",
+    "\\components\\lv_examples\\lv_examples\\src",
+    "\\components\\lv_examples\\lv_examples\\src\\lv_demo_custom",
+    "\\components\\lv_examples\\lv_examples\\src\\lv_demo_custom\\generated",
     "\\main"
   ],
-  "SelectedNode": "\\components\\lvgl_esp32_drivers\\lvgl_tft\\disp_driver.c",
+  "SelectedNode": "\\components\\lv_examples\\lv_examples\\src\\lv_demo_custom\\generated\\events_init.c",
   "PreviewInSolutionExplorer": false
 }

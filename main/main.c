@@ -29,6 +29,7 @@
 
 #include "lvgl_helpers.h"
 #include "lv_examples/src/lv_demo_widgets/lv_demo_widgets.h"
+#include "lv_examples/src/lv_demo_custom/lv_demo_custom.h"
 
 /*********************
  *      DEFINES
@@ -193,7 +194,8 @@ static void create_demo_application(void)
     lv_label_set_text(label2, "This is wireless link lvgl 8.0 demo ");
     lv_obj_align(label2, LV_ALIGN_CENTER, 0, 40);
 	*/
-	lv_demo_widgets();
+	//lv_demo_widgets();
+	lv_demo_custom();
 }
 
 static void IRAM_ATTR lv_tick_task(void *arg)
