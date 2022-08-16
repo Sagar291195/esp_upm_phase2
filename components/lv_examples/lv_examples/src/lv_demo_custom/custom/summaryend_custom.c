@@ -355,7 +355,10 @@ void setter_summaryend_volumeeffectivevalue(uint32_t val){
  *
  */
 void setter_summaryend_volumevariationvalue(float val){
-    lv_label_set_text_fmt(guider_ui.summaryend_volumevariationvalue, "%f %%", val);
+	char data[20];
+	memset(data, 0x00, sizeof(data));
+	sprintf("%f %%", val);
+    lv_label_set_text(guider_ui.summaryend_volumevariationvalue, data);
 }
 
 /**
@@ -400,7 +403,10 @@ void setter_summaryend_houreffectivevalue(char *str){
  *
  */
 void setter_summaryend_hourvariationvalue(float val){
-    lv_label_set_text_fmt(guider_ui.summaryend_hourvariationvalue, "%f %%", val);
+	char data[20];
+	memset(data, 0x00, sizeof(data));
+	sprintf("%f %%", val);
+    lv_label_set_text(guider_ui.summaryend_hourvariationvalue, data);
 }
 
 /**

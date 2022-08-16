@@ -258,7 +258,7 @@ void setter_metrology_service_filterservicealertswitch(bool switch_status){
  *
  */
 void setter_metrology_service_filterserviceinvalue(uint8_t val){
-    lv_label_set_text_fmt(guider_ui.metrology_service_filterserviceinvalue, "%d %%", val);
+    lv_label_set_text_fmt(guider_ui.metrology_service_filterserviceinvalue, "%d %", val);
 }
 
 /**

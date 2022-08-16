@@ -50,9 +50,8 @@ typedef struct
 	lv_obj_t *dashboard_resumeinfo_percentagetext;
 	lv_obj_t *dashboard_resumeinfo_time_label;
 	lv_obj_t *dashboard_resumeinfo_sequence_label;
+	lv_obj_t *dashboard_resumeinfo_messagelabel;
 	lv_obj_t *dashboard_resumeinfo_percentageymboltext;
-	lv_obj_t *dashboard_resumeinfo_middletext;
-	lv_obj_t *dashboard_resumeinfo_lowertext;
 	lv_obj_t *dashboard_resumeinfo_totalliterintlabel;
 	lv_obj_t *dashboard_resumeinfo_totalliterfloatlabel;
 	lv_obj_t *dashboard_resumeinfo_totalhourintlabel;

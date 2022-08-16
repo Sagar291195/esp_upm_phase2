@@ -186,8 +186,8 @@ static void draw_chart_widget(lv_ui *ui, lv_obj_t **parentobject){
 static void draw_dashboard_resumeinfo_widget(lv_ui *ui, lv_obj_t *parentobject){
 	ui->dashboard_resumeinfo_currentstatus = lv_label_create(parentobject);
 	lv_obj_set_width(ui->dashboard_resumeinfo_currentstatus, 250);
-	lv_obj_align_to(ui->dashboard_resumeinfo_currentstatus, parentobject, LV_ALIGN_TOP_LEFT, 30, 10);
-	lv_obj_set_style_text_align(ui->dashboard_resumeinfo_currentstatus, LV_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
+	lv_obj_align_to(ui->dashboard_resumeinfo_currentstatus, parentobject, LV_ALIGN_TOP_LEFT, 30, 5);
+	lv_obj_set_style_text_align(ui->dashboard_resumeinfo_currentstatus, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_text_font(ui->dashboard_resumeinfo_currentstatus,  &lv_font_montserrat_22_regular, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(ui->dashboard_resumeinfo_currentstatus, ESPUPM_COLOR_WHITE, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_label_set_long_mode(ui->dashboard_resumeinfo_currentstatus, LV_LABEL_LONG_CLIP);
@@ -196,14 +196,14 @@ static void draw_dashboard_resumeinfo_widget(lv_ui *ui, lv_obj_t *parentobject){
 	ui->dashboard_resumeinfo_arcinner = lv_arc_create(parentobject);
 	lv_obj_clear_flag(ui->dashboard_resumeinfo_arcinner, LV_OBJ_FLAG_CLICKABLE);
 	lv_obj_align(ui->dashboard_resumeinfo_arcinner, LV_ALIGN_CENTER, 0, -20);
-	lv_obj_set_size(ui->dashboard_resumeinfo_arcinner, 160, 160);
+	lv_obj_set_size(ui->dashboard_resumeinfo_arcinner, 155, 155);
 	lv_obj_set_style_bg_color(ui->dashboard_resumeinfo_arcinner, ESPUPM_COLOR_DARK_GREY, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_bg_opa(ui->dashboard_resumeinfo_arcinner, LV_OPA_TRANSP, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_arc_color(ui->dashboard_resumeinfo_arcinner, ESPUPM_COLOR_WHITE, LV_PART_MAIN|LV_STATE_DEFAULT);
-	lv_obj_set_style_arc_width(ui->dashboard_resumeinfo_arcinner, 8, LV_PART_MAIN|LV_STATE_DEFAULT);
+	lv_obj_set_style_arc_width(ui->dashboard_resumeinfo_arcinner, 10, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_pad_all(ui->dashboard_resumeinfo_arcinner, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_arc_color(ui->dashboard_resumeinfo_arcinner, ESPUPM_COLOR_PURPLE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
-	lv_obj_set_style_arc_width(ui->dashboard_resumeinfo_arcinner, 8, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+	lv_obj_set_style_arc_width(ui->dashboard_resumeinfo_arcinner, 10, LV_PART_INDICATOR|LV_STATE_DEFAULT);
 	lv_obj_set_style_pad_all(ui->dashboard_resumeinfo_arcinner, 0, LV_PART_INDICATOR|LV_STATE_DEFAULT);
 	lv_obj_remove_style(ui->dashboard_resumeinfo_arcinner, NULL, LV_PART_KNOB);
 	lv_arc_set_bg_angles(ui->dashboard_resumeinfo_arcinner, 0, 360);
@@ -217,10 +217,10 @@ static void draw_dashboard_resumeinfo_widget(lv_ui *ui, lv_obj_t *parentobject){
 	lv_obj_set_style_bg_color(ui->dashboard_resumeinfo_arcouter, ESPUPM_COLOR_DARK_GREY, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_bg_opa(ui->dashboard_resumeinfo_arcouter, LV_OPA_TRANSP, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_arc_color(ui->dashboard_resumeinfo_arcouter, ESPUPM_COLOR_WHITE, LV_PART_MAIN|LV_STATE_DEFAULT);
-	lv_obj_set_style_arc_width(ui->dashboard_resumeinfo_arcouter, 8, LV_PART_MAIN|LV_STATE_DEFAULT);
+	lv_obj_set_style_arc_width(ui->dashboard_resumeinfo_arcouter, 10, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_pad_all(ui->dashboard_resumeinfo_arcouter, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_arc_color(ui->dashboard_resumeinfo_arcouter, ESPUPM_COLOR_PURPLE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
-	lv_obj_set_style_arc_width(ui->dashboard_resumeinfo_arcouter, 8, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+	lv_obj_set_style_arc_width(ui->dashboard_resumeinfo_arcouter, 10, LV_PART_INDICATOR|LV_STATE_DEFAULT);
 	lv_obj_set_style_pad_all(ui->dashboard_resumeinfo_arcouter, 0, LV_PART_INDICATOR|LV_STATE_DEFAULT);
 	lv_obj_remove_style(ui->dashboard_resumeinfo_arcouter, NULL, LV_PART_KNOB);
 	lv_arc_set_bg_angles(ui->dashboard_resumeinfo_arcouter, 0, 360);
@@ -233,6 +233,7 @@ static void draw_dashboard_resumeinfo_widget(lv_ui *ui, lv_obj_t *parentobject){
 	lv_obj_set_style_text_align(ui->dashboard_resumeinfo_percentagetext, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_text_font(ui->dashboard_resumeinfo_percentagetext,  &lv_font_montserrat_40, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(ui->dashboard_resumeinfo_percentagetext, ESPUPM_COLOR_WHITE, LV_PART_MAIN|LV_STATE_DEFAULT);
+
 
 	ui->dashboard_resumeinfo_percentageymboltext = lv_label_create(parentobject);
 	lv_obj_align_to(ui->dashboard_resumeinfo_percentageymboltext, ui->dashboard_resumeinfo_percentagetext, LV_ALIGN_OUT_RIGHT_BOTTOM, 0, -10);
@@ -254,6 +255,13 @@ static void draw_dashboard_resumeinfo_widget(lv_ui *ui, lv_obj_t *parentobject){
 	lv_obj_set_style_text_align(ui->dashboard_resumeinfo_sequence_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_text_font(ui->dashboard_resumeinfo_sequence_label,  &lv_font_montserrat_20, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(ui->dashboard_resumeinfo_sequence_label, ESPUPM_COLOR_WHITE, LV_PART_MAIN|LV_STATE_DEFAULT);
+
+	ui->dashboard_resumeinfo_messagelabel = lv_label_create(parentobject);
+	lv_obj_align(ui->dashboard_resumeinfo_messagelabel,  LV_ALIGN_CENTER, 0, -15);
+	lv_label_set_text(ui->dashboard_resumeinfo_messagelabel,  "Let's Start");
+	lv_obj_set_style_text_align(ui->dashboard_resumeinfo_messagelabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
+	lv_obj_set_style_text_font(ui->dashboard_resumeinfo_messagelabel,  &lv_font_montserrat_16_semibold, LV_PART_MAIN|LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(ui->dashboard_resumeinfo_messagelabel, ESPUPM_COLOR_WHITE, LV_PART_MAIN|LV_STATE_DEFAULT);
 
 	lv_obj_t *hor_line = lv_line_create(parentobject);
 	static lv_point_t p[] = {{0, 30}, {0, 80}};
@@ -443,7 +451,6 @@ void setup_scr_dashboard(lv_ui *ui){
 		lv_style_reset(&style_dashboard_menuviewbutton);
 	else
 		lv_style_init(&style_dashboard_menuviewbutton);
-	lv_style_set_bg_color(&style_dashboard_menuviewbutton, ESPUPM_BACKGROUND_COLOR);
 	lv_style_set_bg_opa(&style_dashboard_menuviewbutton, LV_OPA_MAX);
 	lv_style_set_border_opa(&style_dashboard_menuviewbutton, LV_OPA_MIN);
 	lv_style_set_border_width(&style_dashboard_menuviewbutton, 0);

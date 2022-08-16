@@ -34,7 +34,7 @@ static int header_seconds_value = 50;
  *****************************************************************************/
 static lv_obj_t **get_scr_by_id(int scr_id);
 static void header_clock_timer(lv_timer_t *timer);
-
+static volatile resumeinfoStat_e resumeInfostat = WORK_IN_PROGRESS;
 /******************************************************************************
  *      STATIC FUNCTIONS
  *****************************************************************************/
@@ -161,7 +161,7 @@ void guider_load_screen(int scr_id){
             setup_scr_dashboard(&guider_ui);
             deleteoldscreen = true;
         }
-        custom_dashboardscreen_setup(scr_id);
+        update_resumeinfowidget(resumeInfostat);
         break;
 
 	case SCR_PASSWORD:

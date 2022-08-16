@@ -174,7 +174,10 @@ void setter_summary_sample_volumeeffectivevalue(uint32_t val){
  *
  */
 void setter_summary_sample_volumevariationvalue(float val){
-    lv_label_set_text_fmt(guider_ui.summary_sample_volumevariationvalue, "%f %%", val);
+	char data[20];
+	memset(data, 0x00, sizeof(data));
+	sprintf("%f %%", val);
+    lv_label_set_text(guider_ui.summary_sample_volumevariationvalue, data);
 }
 
 /**
@@ -219,7 +222,10 @@ void setter_summary_sample_houreffectivevalue(char *str){
  *
  */
 void setter_summary_sample_hourvariationvalue(float val){
-    lv_label_set_text_fmt(guider_ui.summary_sample_hourvariationvalue, "%f %%", val);
+	char data[20];
+	memset(data, 0x00, sizeof(data));
+	sprintf("%f %%", val);
+    lv_label_set_text(guider_ui.summary_sample_hourvariationvalue, data);
 }
 
 /**
@@ -240,7 +246,10 @@ void setter_summary_sample_airflow_volumetric_cont(uint32_t setpointval, uint32_
     lv_label_set_text_fmt(guider_ui.summary_sample_airflow_meanvalue, "%u", meanvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_airflow_maxvalue, "%u", maxvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_airflow_minvalue, "%u", minvalue);
-    lv_label_set_text_fmt(guider_ui.summary_sample_airflow_variationvalue, "%f %%", variationval);
+    char data[20];
+	memset(data, 0x00, sizeof(data));
+	sprintf("%f %%", variationval);
+    lv_label_set_text(guider_ui.summary_sample_airflow_variationvalue, data);
 
     if(maxarrow)
         lv_img_set_src(guider_ui.summary_sample_airflow_maxvaluearrow, &uparrow);
@@ -271,7 +280,10 @@ void setter_summary_sample_ambient_temp_cont(char * limitvaluestr, uint32_t mean
     lv_label_set_text_fmt(guider_ui.summary_sample_ambienttemperature_meanvalue, "%u", meanvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_ambienttemperature_maxvalue, "%u", maxvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_ambienttemperature_minvalue, "%u", minvalue);
-    lv_label_set_text_fmt(guider_ui.summary_sample_ambienttemperature_variationvalue, "%f %%", variationval);
+    char data[20];
+	memset(data, 0x00, sizeof(data));
+	sprintf("%f %%", variationval);
+    lv_label_set_text(guider_ui.summary_sample_ambienttemperature_variationvalue, data);
 
     if(maxarrow)
         lv_img_set_src(guider_ui.summary_sample_ambienttemperature_maxvaluearrow, &uparrow);
@@ -302,7 +314,10 @@ void setter_summary_sample_ambient_pressure_cont(char * limitvaluestr, uint32_t 
     lv_label_set_text_fmt(guider_ui.summary_sample_ambientpressure_meanvalue, "%u", meanvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_ambientpressure_maxvalue, "%u", maxvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_ambientpressure_minvalue, "%u", minvalue);
-    lv_label_set_text_fmt(guider_ui.summary_sample_ambientpressure_variationvalue, "%f %%", variationval);
+    char data[20];
+	memset(data, 0x00, sizeof(data));
+	sprintf("%f %%", variationval);
+    lv_label_set_text(guider_ui.summary_sample_ambientpressure_variationvalue, data);
 
     if(maxarrow)
         lv_img_set_src(guider_ui.summary_sample_ambientpressure_maxvaluearrow, &uparrow);
@@ -333,7 +348,10 @@ void setter_summary_sample_ambient_humidity_cont(char * limitvaluestr, uint32_t 
     lv_label_set_text_fmt(guider_ui.summary_sample_ambienthumidity_meanvalue, "%u", meanvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_ambienthumidity_maxvalue, "%u", maxvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_ambienthumidity_minvalue, "%u", minvalue);
-    lv_label_set_text_fmt(guider_ui.summary_sample_ambienthumidity_variationvalue, "%f %%", variationval);
+    char data[20];
+	memset(data, 0x00, sizeof(data));
+	sprintf("%f %%", variationval);
+    lv_label_set_text(guider_ui.summary_sample_ambienthumidity_variationvalue, data);
 
     if(maxarrow)
         lv_img_set_src(guider_ui.summary_sample_ambienthumidity_maxvaluearrow, &uparrow);
@@ -364,7 +382,10 @@ void setter_summary_sample_head_loss_cont(char * limitvaluestr, uint32_t meanval
     lv_label_set_text_fmt(guider_ui.summary_sample_headloss_meanvalue, "%u", meanvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_headloss_maxvalue, "%u", maxvalue);
     lv_label_set_text_fmt(guider_ui.summary_sample_headloss_minvalue, "%u", minvalue);
-    lv_label_set_text_fmt(guider_ui.summary_sample_headloss_variationvalue, "%f %%", variationval);
+    char data[20];
+	memset(data, 0x00, sizeof(data));
+	sprintf("%f %%", variationval);
+    lv_label_set_text(guider_ui.summary_sample_headloss_variationvalue, data);
 
     if(maxarrow)
         lv_img_set_src(guider_ui.summary_sample_headloss_maxvaluearrow, &uparrow);

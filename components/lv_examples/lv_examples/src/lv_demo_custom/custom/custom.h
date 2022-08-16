@@ -36,9 +36,12 @@
 #define ESPUPM_COLOR_GREEN				lv_color_make(0x56, 0xA7, 0x3D)
 #define ESPUPM_COLOR_GREY				lv_color_make(0x70, 0x70, 0x70)
 #define ESPUPM_COLOR_PURPLE				lv_color_make(0xA5, 0x5E, 0xEA)
+#define ESPUPM_COLOR_LIGHT_PURPLE		lv_color_make(0xD3, 0x83, 0xFF)
 #define ESPUPM_COLOR_YELLOW				lv_color_make(0xFE, 0xD3, 0x2F)
 #define ESPUPM_COLOR_RED				lv_color_make(0xEB, 0x3B, 0x5A)
 #define ESPUPM_COLOR_DARK_BLUE			lv_color_make(0x17, 0x27, 0x47)
+#define ESPUPM_COLOR_ORANGE				lv_color_make(0xFA, 0x82, 0x23)
+#define ESPUPM_COLOR_BLUE_RESUMEINFO	lv_color_make(0x38, 0x67, 0xD6)
 
 LV_FONT_DECLARE(signal_icon_16);
 LV_IMG_DECLARE(navier_logo);
@@ -124,6 +127,16 @@ typedef enum{
 	SCR_TEST,
 }screen_id_e;
 
+typedef enum{
+	WORK_IN_PROGRESS = 0,
+	JOB_FINISHED = 1,
+	READY = 2,
+	WAIT_IN_PROGRESS = 3,
+	METROLOGY_NEEDED = 4,
+	ALERT_SERVICE = 5,
+	EXPORT_DATA = 6,
+	METROLOGY_INPROGRESS = 7,
+}resumeinfoStat_e;
 /**********************
  *      GLOBAL FUNCTIONS
  **********************/
@@ -169,7 +182,7 @@ void setter_dashboard_metrologies_text(char *str);
 void setter_dashboard_metrology_status(bool status);
 void setter_dashboard_statistic_text(char *str);
 void setter_dashboard_statstics_status(bool status);
-
+void update_resumeinfowidget(resumeinfoStat_e statid);
 
 /****Preset scenario control API*****/
 void custom_presetscenario_screen_setup(screen_id_e screenid);

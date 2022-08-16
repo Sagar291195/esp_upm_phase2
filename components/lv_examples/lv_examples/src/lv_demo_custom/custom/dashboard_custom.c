@@ -19,16 +19,7 @@
 /******************************************************************************
  *      TYPEDEF
  *****************************************************************************/
-typedef enum{
-	WORK_IN_PROGRESS,
-	JOB_FINISHED,
-	READY,
-	WAIT_IN_PROGRESS,
-	METROLOGY_NEEDED,
-	ALERT_SERVICE,
-	EXPORT_DATA,
-	METROLOGY_INPROGRESS,
-}resumeinfoScreen_e;
+
 /******************************************************************************
  *      EXTERN VARIABLES
  *****************************************************************************/
@@ -57,15 +48,154 @@ void custom_dashboardscreen_setup(screen_id_e screenid){
 	 if(screenid == SCR_DASHBOARD){
 		lv_obj_set_style_bg_color(guider_ui.dashboard_background, ESPUPM_BACKGROUND_COLOR, LV_PART_MAIN|LV_STATE_DEFAULT);
 		lv_obj_set_style_bg_grad_color(guider_ui.dashboard_background, ESPUPM_BACKGROUND_COLOR, LV_PART_MAIN|LV_STATE_DEFAULT);
-		lv_obj_set_style_bg_color(guider_ui.dashboard_menuview,  ESPUPM_BACKGROUND_COLOR, LV_PART_MAIN|LV_STATE_DEFAULT);
-		lv_obj_set_style_bg_grad_color(guider_ui.dashboard_menuview, ESPUPM_BACKGROUND_COLOR, LV_PART_MAIN|LV_STATE_DEFAULT);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuview,  lv_color_make(0x50, 0x50, 0x50), LV_PART_MAIN|LV_STATE_DEFAULT);
+		lv_obj_set_style_bg_grad_color(guider_ui.dashboard_menuview, lv_color_make(0x50, 0x50, 0x50), LV_PART_MAIN|LV_STATE_DEFAULT);
+		lv_obj_add_flag(guider_ui.dashboard_menuviewservicebutton, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuviewinfobutton, ESPUPM_COLOR_BLACK, LV_PART_MAIN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuviewarchievebutton, ESPUPM_COLOR_BLACK, LV_PART_MAIN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuviewmetrologybutton, ESPUPM_COLOR_BLACK, LV_PART_MAIN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuviewparameterbutton, ESPUPM_COLOR_BLACK, LV_PART_MAIN);
+		lv_obj_align_to(guider_ui.dashboard_menuviewinfobutton, guider_ui.dashboard_menuviewservicebutton, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+		lv_obj_align_to(guider_ui.dashboard_menuviewarchievebutton, guider_ui.dashboard_menuviewinfobutton, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+		lv_obj_align_to(guider_ui.dashboard_menuviewmetrologybutton, guider_ui.dashboard_menuviewarchievebutton, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+		lv_obj_align_to(guider_ui.dashboard_menuviewparameterbutton, guider_ui.dashboard_menuviewmetrologybutton, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
 	 }else if(screenid == SCR_DASHBOARD_BLUE){
 		lv_obj_set_style_bg_color(guider_ui.dashboard_background, ESPUPM_COLOR_BLUE, LV_PART_MAIN|LV_STATE_DEFAULT);
 		lv_obj_set_style_bg_grad_color(guider_ui.dashboard_background, ESPUPM_COLOR_BLUE, LV_PART_MAIN|LV_STATE_DEFAULT);
-		lv_obj_set_style_bg_color(guider_ui.dashboard_menuview,  ESPUPM_COLOR_DARK_BLUE, LV_PART_MAIN);
-		lv_obj_set_style_bg_grad_color(guider_ui.dashboard_menuview, ESPUPM_COLOR_DARK_BLUE, LV_PART_MAIN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuview,  ESPUPM_COLOR_LIGHT_BLUE, LV_PART_MAIN);
+		lv_obj_set_style_bg_grad_color(guider_ui.dashboard_menuview, ESPUPM_COLOR_LIGHT_BLUE, LV_PART_MAIN);
+		lv_obj_clear_flag(guider_ui.dashboard_menuviewservicebutton, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuviewinfobutton, ESPUPM_COLOR_DARK_BLUE, LV_PART_MAIN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuviewarchievebutton, ESPUPM_COLOR_DARK_BLUE, LV_PART_MAIN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuviewmetrologybutton, ESPUPM_COLOR_DARK_BLUE, LV_PART_MAIN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuviewparameterbutton, ESPUPM_COLOR_DARK_BLUE, LV_PART_MAIN);
+		lv_obj_set_style_bg_color(guider_ui.dashboard_menuviewservicebutton, ESPUPM_COLOR_DARK_BLUE, LV_PART_MAIN);
+		lv_obj_align_to(guider_ui.dashboard_menuviewarchievebutton, guider_ui.dashboard_menuviewservicebutton, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+		lv_obj_align_to(guider_ui.dashboard_menuviewmetrologybutton, guider_ui.dashboard_menuviewarchievebutton, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+		lv_obj_align_to(guider_ui.dashboard_menuviewparameterbutton, guider_ui.dashboard_menuviewmetrologybutton, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+		lv_obj_align_to(guider_ui.dashboard_menuviewinfobutton, guider_ui.dashboard_menuviewparameterbutton, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
 	 }
 }
+
+
+void update_resumeinfowidget(resumeinfoStat_e statid){
+	static resumeinfoStat_e previousState = 0xFF;
+
+	if(previousState != statid){
+		if(previousState == METROLOGY_INPROGRESS)
+			custom_dashboardscreen_setup(SCR_DASHBOARD);
+		if(statid == METROLOGY_INPROGRESS)
+			custom_dashboardscreen_setup(SCR_DASHBOARD_BLUE);
+		previousState = statid;
+	}
+	switch(statid){
+	case WORK_IN_PROGRESS:
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_currentstatus, "Work in progress");
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcinner, ESPUPM_COLOR_LIGHT_BLUE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcouter, ESPUPM_COLOR_LIGHT_BLUE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_label_set_text_fmt(guider_ui.dashboard_resumeinfo_percentagetext, "%d", 76);
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_time_label,  "1h 23min");
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_sequence_label,  "01 / 01");
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_messagelabel, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_percentageymboltext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_percentagetext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_time_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_sequence_label, LV_OBJ_FLAG_HIDDEN);
+		break;
+
+	case JOB_FINISHED:
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_currentstatus, "job finished");
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcinner, ESPUPM_COLOR_BLUE_RESUMEINFO, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcouter, ESPUPM_COLOR_BLUE_RESUMEINFO, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentagetext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentageymboltext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_time_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_sequence_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_messagelabel, LV_OBJ_FLAG_HIDDEN);
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_messagelabel, "Finished\n Successfully");
+		break;
+
+	case READY:
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_currentstatus, "Ready");
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcinner, ESPUPM_COLOR_GREEN, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcouter, ESPUPM_COLOR_GREEN, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentagetext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentageymboltext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_time_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_sequence_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_messagelabel, LV_OBJ_FLAG_HIDDEN);
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_messagelabel, "Let's\n Start");
+		break;
+
+	case WAIT_IN_PROGRESS:
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_currentstatus, "Wait in progress");
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcinner, ESPUPM_COLOR_YELLOW, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcouter, ESPUPM_COLOR_YELLOW, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentagetext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentageymboltext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_time_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_sequence_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_messagelabel, LV_OBJ_FLAG_HIDDEN);
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_messagelabel, "Start in\n 1 h 23 min");
+		break;
+
+	case METROLOGY_NEEDED:
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_currentstatus, "Metrology needed");
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcinner, ESPUPM_COLOR_ORANGE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcouter, ESPUPM_COLOR_ORANGE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentagetext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentageymboltext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_time_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_sequence_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_messagelabel, LV_OBJ_FLAG_HIDDEN);
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_messagelabel, "Metrology\n in\n 23 Days");
+		break;
+
+	case ALERT_SERVICE:
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_currentstatus, "Alert service");
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcinner, ESPUPM_COLOR_RED, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcouter, ESPUPM_COLOR_RED, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentagetext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentageymboltext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_time_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_sequence_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_messagelabel, LV_OBJ_FLAG_HIDDEN);
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_messagelabel, "Alert\n Service\n Allowed");
+		break;
+
+	case METROLOGY_INPROGRESS:
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_currentstatus, "Metrology in progress");
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcinner, ESPUPM_COLOR_LIGHT_PURPLE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcouter, ESPUPM_COLOR_LIGHT_PURPLE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_label_set_text_fmt(guider_ui.dashboard_resumeinfo_percentagetext, "%d", 76);
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_time_label,  "1h 23min");
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_sequence_label,  "01 / 01");
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_messagelabel, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_percentageymboltext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_percentagetext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_time_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_sequence_label, LV_OBJ_FLAG_HIDDEN);
+		break;
+
+	case EXPORT_DATA:
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_currentstatus, "Export data");
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcinner, ESPUPM_COLOR_PURPLE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_set_style_arc_color(guider_ui.dashboard_resumeinfo_arcouter, ESPUPM_COLOR_PURPLE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentagetext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_percentageymboltext, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_time_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_add_flag(guider_ui.dashboard_resumeinfo_sequence_label, LV_OBJ_FLAG_HIDDEN);
+		lv_obj_clear_flag(guider_ui.dashboard_resumeinfo_messagelabel, LV_OBJ_FLAG_HIDDEN);
+		lv_label_set_text(guider_ui.dashboard_resumeinfo_messagelabel, "Export in\nprogress");
+		break;
+
+
+	default:
+		break;
+	}
+
+}
+
 
 /**
  * Callback function for dashboard menu button events
@@ -143,9 +273,6 @@ void on_dashboard_parameter_buttonreleased(void){
  *
  */
 void setter_dashboard_chart(lv_coord_t *dashboard_chart_arr_val, uint8_t len){
-
-    uint8_t i;
-
     for(uint8_t i=0; i<len; i++)
         guider_ui.dashboard_ser->y_points[i]=dashboard_chart_arr_val[i];
 

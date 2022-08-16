@@ -15,7 +15,7 @@ static void dashboard_button_eventhandler(lv_event_t *e){
 	switch (code)
 	{
 		case LV_EVENT_RELEASED:
-			guider_load_screen(SCR_DASHBOARD_BLUE);
+			guider_load_screen(SCR_DASHBOARD);
 			break;
 		default:
 			break;
