@@ -94,7 +94,7 @@ void setter_flow_sensor_par_label_point_number(int val){
 void setter_flow_sensor_par_label_global_accuracy(float val){
 	char data[20];
 	memset(data, 0x00, sizeof(data));
-	sprintf("%f %%", val);
+	sprintf(data, "%f %%", val);
     lv_label_set_text(guider_ui.flow_sensor_par_label_global_accuracy, data);
 }
 
@@ -203,7 +203,7 @@ void setter_flow_sensor_par_cont_point_comp_val(uint8_t point_num, uint32_t val)
 void setter_flow_sensor_par_cont_point_accuracy(uint8_t point_num, float val){
 	char data[20];
 	memset(data, 0x00, sizeof(data));
-	sprintf("%f %%", val);
+	sprintf(data, "%f %%", val);
     lv_label_set_text(guider_ui.flow_sensor_par_cont_point_accuracy[point_num], data);
 }
 /******************************************************************************
