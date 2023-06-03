@@ -16,11 +16,11 @@
 /*********************
  *      DEFINES
  *********************/
-#define SCREEN_WIDTH			320
-#define SCREEN_HEIGHT			480
-#define SCREEN_MAX_OPACITY		255
-#define SCREEN_MIN_OPACITY		0
-#define SCREEN_HEADER_HEIGHT	50
+#define SCREEN_WIDTH				320
+#define SCREEN_HEIGHT				480
+#define SCREEN_MAX_OPACITY			255
+#define SCREEN_MIN_OPACITY			0
+#define SCREEN_HEADER_HEIGHT		50
 #define SCREEN_MENU_BUTTON_HEIGHT	44
 #define SCREEN_MENU_BUTTON_WIDTH	44
 

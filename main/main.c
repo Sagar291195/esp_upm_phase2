@@ -13,11 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_freertos_hooks.h"
-#include "freertos/semphr.h"
-#include "esp_system.h"
+#include "common.h"
 #include "driver/gpio.h"
 
 /* Littlevgl specific */
@@ -34,9 +30,10 @@
 /*********************
  *      DEFINES
  *********************/
-#define TAG "demo"
-#define LV_TICK_PERIOD_MS 1
-#define WAKEMODE 32
+#define TAG                     "demo"
+#define LV_TICK_PERIOD_MS       1
+#define WAKEMODE_GPIO          32
+
 /**********************
  *  STATIC PROTOTYPES
  **********************/
@@ -207,7 +204,7 @@ static void IRAM_ATTR lv_tick_task(void *arg)
 static void wakeupmodeInit(void)
 {
     // Set GPIO as OUTPUT
-    gpio_pad_select_gpio(WAKEMODE);
-    gpio_set_direction(WAKEMODE, GPIO_MODE_OUTPUT); // WakeMode
-    gpio_set_level(WAKEMODE, 0);
+    gpio_pad_select_gpio(WAKEMODE_GPIO);
+    gpio_set_direction(WAKEMODE_GPIO, GPIO_MODE_OUTPUT); // WakeMode
+    gpio_set_level(WAKEMODE_GPIO, 0);
 }
